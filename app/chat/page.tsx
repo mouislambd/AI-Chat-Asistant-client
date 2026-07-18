@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 interface Message { role: 'user' | 'assistant', content: string }
 interface Chat { _id: string, title: string, updatedAt: string }
 
-export default function ChatPage() {
+function ChatContent() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -79,7 +79,7 @@ export default function ChatPage() {
     const userMessage = { role: 'user' as const, content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
-
+    
     try {
         const response = await api.post("/api/chat/message", { chatId, message: input });
         setMessages(prev => [...prev, { role: 'assistant', content: response.data.reply }]);
@@ -132,3 +132,12 @@ export default function ChatPage() {
     </main>
   );
 }
+
+export default function ChatPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ChatContent />
+        </Suspense>
+    );
+}
+
