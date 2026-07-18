@@ -13,6 +13,7 @@ function ChatContent() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [chatId, setChatId] = useState<string | null>(null);
@@ -98,12 +99,20 @@ function ChatContent() {
   return (
     <main className="h-screen flex flex-col">
       <Navbar />
-      <div className="flex-1 flex overflow-hidden">
-        <aside className="w-64 bg-gray-50 border-r border-indigo-100 p-4 overflow-y-auto">
-            <button onClick={handleNewChat} className="w-full bg-indigo-600 text-white p-2 rounded-lg mb-4 hover:bg-indigo-700">New Chat</button>
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Mobile menu toggle */}
+        <button 
+            className="md:hidden absolute top-2 left-2 z-10 bg-indigo-600 text-white p-2 rounded"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+            {isSidebarOpen ? "Close" : "Chats"}
+        </button>
+
+        <aside className={`${isSidebarOpen ? 'flex' : 'hidden'} md:flex flex-col w-64 bg-gray-50 border-r border-indigo-100 p-4 absolute md:relative z-20 h-full overflow-y-auto`}>
+            <button onClick={handleNewChat} className="w-full bg-indigo-600 text-white p-2 rounded-lg mb-4 hover:bg-indigo-700 mt-10 md:mt-0">New Chat</button>
             <div className="space-y-2">
                 {chatList.map(chat => (
-                    <button key={chat._id} onClick={() => loadChat(chat._id)} className={`group w-full text-left p-2 rounded hover:bg-indigo-50 flex justify-between items-center ${chatId === chat._id ? 'bg-indigo-100' : ''}`}>
+                    <button key={chat._id} onClick={() => {loadChat(chat._id); setIsSidebarOpen(false);}} className={`group w-full text-left p-2 rounded hover:bg-indigo-50 flex justify-between items-center ${chatId === chat._id ? 'bg-indigo-100' : ''}`}>
                         <div className="truncate">
                             <div className="font-medium text-sm truncate">{chat.title}</div>
                             <div className="text-xs text-gray-500">{new Date(chat.updatedAt).toLocaleDateString()}</div>
@@ -113,7 +122,7 @@ function ChatContent() {
                 ))}
             </div>
         </aside>
-        <section className="flex-1 flex flex-col p-4 bg-white">
+        <section className="flex-1 flex flex-col p-4 bg-white mt-12 md:mt-0">
             <div className="flex-1 overflow-y-auto mb-4 space-y-4">
                 {messages.map((m, i) => (
                     <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
