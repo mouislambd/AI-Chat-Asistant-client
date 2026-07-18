@@ -47,6 +47,7 @@ function ChatContent() {
     setChatId(null);
     setMessages([]);
     setInput("");
+    setIsSidebarOpen(false); // Close sidebar on mobile after starting new chat
     inputRef.current?.focus();
   };
 
