@@ -1,13 +1,13 @@
 import axios from "axios";
 
+// If NEXT_PUBLIC_API_URL is set (local dev), use it. Otherwise, use empty string for relative proxying.
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "";
+
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL,
   withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  // Placeholder for adding Authorization header if token is stored
-  // const token = localStorage.getItem("token");
-  // if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
