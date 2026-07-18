@@ -67,7 +67,7 @@ export default function Navbar() {
               <Link href="/dashboard" className="block text-gray-600">Dashboard</Link>
               {(session.user.role === "admin" || session.user.role === "mentor") && (
                 <>
-                    <Link href="/admin/resources" className="block text-gray-600">Admin</Link>
+                    <Link href="/admin/resources" className="block text-gray-600">Add Resource</Link>
                     <Link href="/admin/resources/manage" className="block text-gray-600">Manage Resources</Link>
                 </>
               )}
