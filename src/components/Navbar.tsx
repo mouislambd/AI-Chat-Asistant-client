@@ -29,7 +29,7 @@ export default function Navbar() {
                 </Link>
                 {(session.user.role === "admin" || session.user.role === "mentor") && (
                   <>
-                    <Link href="/admin/resources" className="text-gray-600 hover:text-indigo-600">Admin</Link>
+                    <Link href="/admin/resources" className="text-gray-600 hover:text-indigo-600">Add Resource</Link>
                     <Link href="/admin/resources/manage" className="text-gray-600 hover:text-indigo-600">Manage Resources</Link>
                   </>
                 )}
